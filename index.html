@@ -34,6 +34,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- EmailJS SDK — powers the real contact form -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 <style>
 :root{
   /* ─ Backgrounds ─ */
@@ -2531,11 +2533,32 @@ const so=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersec
 const skSec=document.getElementById('skills');
 if(skSec)so.observe(skSec);
 
-/* ── FORM (enhanced) ── */
+/* ── FORM — EmailJS Real Email Sending ── */
 (function(){
+  /* ┌────────────────────────────────────────────────────────────────┐
+   * │  EmailJS Config — fill these 3 values from emailjs.com        │
+   * │  1. PUBLIC KEY  → Account → API Keys                          │
+   * │  2. SERVICE ID  → Email Services → your Gmail service id       │
+   * │  3. TEMPLATE ID → Email Templates → your template id           │
+   * └────────────────────────────────────────────────────────────────┘ */
+  const EMAILJS_PUBLIC_KEY  = 'VptZUqNw1PL7D4Bh_';   // EmailJS Public Key
+  const EMAILJS_SERVICE_ID  = 'service_60y9rpr';     // Gmail Service ID
+  const EMAILJS_TEMPLATE_ID = 'template_ewrctfk';    // Contact Us Template ID
+
+  // Init EmailJS once the SDK is ready
+  function initEmailJS(){
+    if(window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', initEmailJS);
+  } else {
+    initEmailJS();
+  }
+
   const fname   = document.getElementById('fname');
   const femail  = document.getElementById('femail');
   const fmsg    = document.getElementById('fmessage');
+  const fsubject= document.getElementById('fsubject');
   const charCtr = document.getElementById('charCtr');
 
   if(fmsg && charCtr){
@@ -2552,6 +2575,18 @@ if(skSec)so.observe(skSec);
   }
   function validateEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
 
+  function showToast(msg, color){
+    const t=document.createElement('div');
+    t.textContent=msg;
+    t.style.cssText=`position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(0);
+      background:${color||'rgba(10,10,30,.95)'};color:#fff;padding:14px 28px;
+      border-radius:14px;font-family:'Poppins',sans-serif;font-size:.92rem;font-weight:600;
+      z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);
+      animation:toastPop .35s var(--ease) forwards;white-space:nowrap;backdrop-filter:blur(12px);`;
+    document.body.appendChild(t);
+    setTimeout(()=>{t.style.animation='toastFade .35s ease forwards';setTimeout(()=>t.remove(),400);},4000);
+  }
+
   window.sendMsg=function(e){
     e.preventDefault();
     let valid=true;
@@ -2563,20 +2598,47 @@ if(skSec)so.observe(skSec);
     const btn=document.getElementById('csub');
     btn.classList.add('loading');
     btn.disabled=true;
-    btn.querySelector('.spin').style.display='inline-block';
-    setTimeout(()=>{
+    btn.innerHTML='<span class="spin" style="display:inline-block"></span> Sending…';
+
+    // Build template params — these must match your EmailJS template variables
+    const templateParams = {
+      from_name   : fname.value.trim(),
+      from_email  : femail.value.trim(),
+      subject     : (fsubject && fsubject.value) ? fsubject.value : 'Portfolio Contact',
+      message     : fmsg.value.trim(),
+      reply_to    : femail.value.trim()
+    };
+
+    if(!window.emailjs){
+      // EmailJS SDK not loaded (likely offline or key not set) — fallback to mailto
       btn.classList.remove('loading');
       btn.disabled=false;
-      btn.querySelector('.spin').style.display='none';
-      btn.innerHTML='<span class="spin"></span>✅ Message Sent!';
-      btn.style.background='linear-gradient(135deg,#10b981,#059669)';
-      setTimeout(()=>{
+      btn.innerHTML='<span class="spin"></span>Send Message 🚀';
+      showToast('⚠️ EmailJS not loaded. Please check your API keys.','rgba(239,68,68,.9)');
+      return;
+    }
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+      .then(()=>{
+        btn.classList.remove('loading');
+        btn.disabled=false;
+        btn.innerHTML='<span class="spin"></span>✅ Message Sent!';
+        btn.style.background='linear-gradient(135deg,#10b981,#059669)';
+        showToast('🎉 Your message was sent! Prashant will reply soon.','rgba(16,185,129,.9)');
+        setTimeout(()=>{
+          btn.innerHTML='<span class="spin"></span>Send Message 🚀';
+          btn.style.background='';
+          e.target.reset();
+          if(charCtr)charCtr.textContent='0 / 500';
+        },3500);
+      })
+      .catch(err=>{
+        console.error('EmailJS error:',err);
+        btn.classList.remove('loading');
+        btn.disabled=false;
         btn.innerHTML='<span class="spin"></span>Send Message 🚀';
-        btn.style.background='';
-        e.target.reset();
-        if(charCtr)charCtr.textContent='0 / 500';
-      },3500);
-    },1600);
+        showToast('❌ Failed to send. Try emailing directly: prashantproject01@gmail.com','rgba(239,68,68,.9)');
+      });
   };
 
   // Clear error on input
