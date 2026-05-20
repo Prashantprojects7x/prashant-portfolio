@@ -103,8 +103,8 @@ nav.solid{background:rgba(6,6,16,.85);backdrop-filter:blur(20px);-webkit-backdro
 .nav-links a{display:inline-flex;align-items:center;padding:10px 16px;min-height:44px;border-radius:var(--pill);color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:500;transition:all .25s;letter-spacing:.2px;}
 .nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--panel-h);}
 .nav-links a.active{color:var(--v);background:rgba(139,92,246,.12);}
-.nav-cta{padding:9px 22px;border-radius:var(--pill);background:var(--g1);color:#fff;font-weight:700;font-size:.88rem;text-decoration:none;transition:all .3s var(--ease);box-shadow:0 4px 20px rgba(139,92,246,.3);}
-.nav-cta:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 8px 28px rgba(139,92,246,.5);}
+.nav-cta{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;padding:8px 20px;border-radius:30px;background:var(--g1);color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:.85rem;text-decoration:none;transition:all .3s var(--ease);box-shadow:0 4px 15px rgba(139,92,246,.3);}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(139,92,246,.5);}
 .ham{display:none;background:none;border:1px solid var(--bdr);color:var(--text);width:40px;height:40px;border-radius:10px;font-size:1.1rem;cursor:pointer;}
 
 /* ── HERO ── */
@@ -649,8 +649,7 @@ nav.solid{
 .nav-brand img{width:54px;height:54px;border-radius:14px;border:2.5px solid rgba(157,111,255,.6);box-shadow:0 0 24px rgba(157,111,255,.4);}
 .nav-links a{font-family:'Poppins',sans-serif;font-size:.84rem;letter-spacing:.1px;border-radius:10px;}
 .nav-links a.active{background:rgba(157,111,255,.15);border:1px solid rgba(157,111,255,.2);color:#c4a6ff;}
-.nav-cta{background:var(--g1);border-radius:12px;font-family:'Poppins',sans-serif;padding:9px 24px;box-shadow:0 4px 20px rgba(157,111,255,.35),inset 0 1px 0 rgba(255,255,255,.2);}
-.nav-cta:hover{box-shadow:0 8px 32px rgba(157,111,255,.55),inset 0 1px 0 rgba(255,255,255,.2);}
+/* nav-cta styling unified above */
 
 /* ─ HERO ─ */
 .hero{padding:130px 40px 80px;}
@@ -1981,7 +1980,7 @@ body{overflow-x:hidden;}
         <div class="tl-dot"></div>
         <span class="tl-year">2023 – 2024</span>
         <div class="tl-title">Coding Enthusiast</div>
-        <p class="tl-desc">Began deep-diving into HTML, CSS &amp; JavaScript. Created interactive projects including a glassmorphic Tic Tac Toe game with win detection and animated UI.</p>
+        <p class="tl-desc">Began deep-diving into HTML, CSS &amp; JavaScript. Created interactive web applications with advanced UI components and smooth animations.</p>
       </div>
       <div class="tl-item">
         <div class="tl-dot"></div>
@@ -2012,19 +2011,6 @@ body{overflow-x:hidden;}
         </div>
       </div>
 
-      <div class="proj-card shimmer">
-        <div class="proj-thumb" style="position:relative;">
-          <div class="bg bg-v"></div>
-          <div class="emoji">🎮</div>
-          <span class="proj-tech-label">HTML · CSS · JS</span>
-        </div>
-        <div class="proj-body">
-          <h4>Tic Tac Toe Game</h4>
-          <p>Interactive, fully functional game with glassmorphic UI, win detection, game-history tracking, and smooth animations — deployed live.</p>
-          <div class="ptags"><span class="ptag">HTML</span><span class="ptag">CSS</span><span class="ptag">JavaScript</span></div>
-          <a class="proj-link" href="https://tictactoeplay.lovable.app" target="_blank">Play the Game ↗</a>
-        </div>
-      </div>
 
       <div class="proj-card shimmer">
         <div class="proj-thumb" style="position:relative;">
@@ -2119,7 +2105,7 @@ body{overflow-x:hidden;}
     <h2 class="sec-title">Fun <span>Facts</span></h2>
     <div class="facts-grid">
       <div class="fact-card"><div class="fact-inner"><div class="fact-front"><div class="fact-emoji">☕</div><div class="fact-q">Fuel of choice?</div></div><div class="fact-back"><p>Coffee! ☕ I run on chai & code equally.</p></div></div></div>
-      <div class="fact-card"><div class="fact-inner"><div class="fact-front"><div class="fact-emoji">🎮</div><div class="fact-q">First project?</div></div><div class="fact-back"><p>A Tic Tac Toe game — and I still love it!</p></div></div></div>
+      <div class="fact-card"><div class="fact-inner"><div class="fact-front"><div class="fact-emoji">🌐</div><div class="fact-q">First project?</div></div><div class="fact-back"><p>A basic personal webpage — the start of my coding journey!</p></div></div></div>
       <div class="fact-card"><div class="fact-inner"><div class="fact-front"><div class="fact-emoji">🤖</div><div class="fact-q">Dream project?</div></div><div class="fact-back"><p>Building an AI assistant that thinks like a human.</p></div></div></div>
       <div class="fact-card"><div class="fact-inner"><div class="fact-front"><div class="fact-emoji">🚀</div><div class="fact-q">Favourite quote?</div></div><div class="fact-back"><p>"Stay hungry, stay foolish." — Steve Jobs</p></div></div></div>
       <div class="fact-card"><div class="fact-inner"><div class="fact-front"><div class="fact-emoji">🌍</div><div class="fact-q">Biggest interest?</div></div><div class="fact-back"><p>Space science & astrophysics — the universe is incredible!</p></div></div></div>
@@ -2461,7 +2447,7 @@ nl.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nl.classList
 /* inject Hire Me into mobile nav if not already present */
 (function(){
   const hireme=nl.querySelector('.nav-hire');
-  if(!hireme){const li=document.createElement('li');li.innerHTML='<a href="#contact" class="nav-hire" style="display:flex;align-items:center;background:var(--g1);border-radius:12px;color:#fff;font-weight:700;margin-top:6px;">Hire Me →</a>';nl.appendChild(li);}
+  if(!hireme){const li=document.createElement('li');li.innerHTML='<a href="#contact" class="nav-hire" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;width:max-content;padding:8px 20px;background:var(--g1);border-radius:30px;color:#fff;font-weight:600;font-size:.85rem;margin-top:6px;font-family:\'Poppins\',sans-serif;">Hire Me →</a>';nl.appendChild(li);}
 })();
 
 /* ── ACTIVE NAV ── */
